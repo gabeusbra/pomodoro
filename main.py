@@ -1,16 +1,24 @@
 from tkinter import *
 import math
+import pygame
+import time
+
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
 RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
-WORK_MIN = 1
+WORK_MIN = 30
 SHORT_BREAK_MIN = 5
-LONG_BREAK_MIN = 20
+LONG_BREAK_MIN = 10
 reps = 0
 timer = None
+
+
+
+
+
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
@@ -22,6 +30,16 @@ def reset_timer():
     global reps
     reps = 0
 
+# ---------------------------- sound ------------------------------- #
+def play():
+    pygame.mixer.init()  # initialize mixer module
+
+    pygame.mixer.music.load('pomodoro_timer.mp3')
+
+    pygame.mixer.music.play()
+
+def stop():
+    pygame.mixer.music.stop()
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 
@@ -41,6 +59,7 @@ def start_timer():
         title_label.config(text="Break", fg=PINK)
     else:
         count_down(work_sec)
+
         title_label.config(text="Work", fg=GREEN)
 
 
@@ -80,10 +99,10 @@ canvas.create_image(100, 112, image=tomato_img)
 timer_text = canvas.create_text(100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
 canvas.grid(column=1, row=1)
 
-start_button = Button(text="Start", highlightthickness=0, command=start_timer)
+start_button = Button(text="Start", highlightthickness=0, command=lambda: [start_timer(),play()])
 start_button.grid(column=0, row=2)
 
-reset_button = Button(text="Reset", highlightthickness=0, command=reset_timer)
+reset_button = Button(text="Reset", highlightthickness=0, command=lambda: [reset_timer(), stop()])
 reset_button.grid(column=2, row=2)
 
 check_marks = Label(fg=GREEN, bg=YELLOW)
